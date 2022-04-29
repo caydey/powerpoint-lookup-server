@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  ## api listening on port 3000
+  server: # back-end nodejs
+    build: ./server
+    restart: always
+
+  ## creates reverse proxy for port 3000 to port 80
+  nginx: # front-end reverse proxy nginx
+    build: ./client
+    restart: always
+    ports:  ## port 80 localhost goes to port 80 on docker
+      - "80:80"
+    depends_on:
+      - server

@@ -4,6 +4,8 @@ SLIDES_FOLDER="./slides"
 IMAGES_OUTPUT_FOLDER="./client/slides"
 JSON_OUTPUT_FILE="./server/data/slides-text.json"
 
+mkdir $SLIDES_FOLDER
+
 # pptx folder check
 if [ -z "$(ls -A $SLIDES_FOLDER/*.pptx)" ]; then
 	echo "no pptx files found in '$SLIDES_FOLDER'"
@@ -43,7 +45,7 @@ echo
 echo "converting pdf -> jpg and extracting text"
 
 # remove current slide images
-rm "$IMAGES_OUTPUT_FOLDER/*.jpg"
+rm -f "$IMAGES_OUTPUT_FOLDER/*.jpg"
 JSON="{}"
 for pdf in $TMP_DIR/pdf-slides/*.pdf; do
 	printf "."

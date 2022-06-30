@@ -1,3 +1,6 @@
+client/node_modules
+server/dist
+server/node_modules
 slides
 client/slides
 server/data/slides-text.json

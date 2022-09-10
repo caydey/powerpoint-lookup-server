@@ -1,0 +1,30 @@
+slide
+	title: text		SLIDESHOW_NAME
+	number: number	SLIDESHOW_NUMBER
+	content: text	CONTENT
+
+
+# Not needed as docker
+DELETE /slides
+
+PUT /slides
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "title": { "type": "text" },
+        "number": { "type": "integer" },
+        "content": { "type": "text" }
+      }
+    }
+  }
+} 
+
+PUT /slides/_doc
+{
+  "settings": {
+    "title": "test",
+    "number": 1,
+    "content": "my slideshow"
+  }
+}

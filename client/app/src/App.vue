@@ -1,39 +1,59 @@
 <template>
   <div class="container text-center">
-    <h1>{{ website_title }}</h1>
+    <h1>PowerPoint Lookup Server</h1>
     <search-box @submit="queryApi" @clear="clearSlides"></search-box>
-    <slides-view v-if="matchingSlides.length > 0" :matchingSlides="matchingSlides"></slides-view>
-    <error-message v-if="errorMessage != ''" :message="errorMessage"></error-message>
-    <previous-searches :searches="prevSearches" :activeConnections="activeConnections"></previous-searches>
+    <slides-view
+      v-if="matchingSlides.length > 0"
+      :matchingSlides="matchingSlides"
+    ></slides-view>
+    <slides-stats
+      :stats="slidesStats"
+      v-else-if="errorMessage == ''"
+    ></slides-stats>
+
+    <error-message
+      v-if="errorMessage != ''"
+      :message="errorMessage"
+    ></error-message>
+
+    <previous-searches
+      :searches="prevSearches"
+      :activeConnections="activeConnections"
+    ></previous-searches>
   </div>
 </template>
 
 
 <style>
 html body {
-  background-color: rgb(20,22,27);
+  background-color: rgb(20, 22, 27);
 }
 /* font-awesome-icon */
-
 </style>
 
 <style scoped>
 h1 {
-  color: rgb(78,89,155);
+  color: rgb(78, 89, 155);
   font-size: 40px;
   margin: 6px;
 }
 </style>
 
 <script>
-import axios from 'axios';
 import socketClient from './socketClient';
-import { API_QUERY, STATIC_HOST } from './config.js';
 
-import SearchBox from './components/InputKeywords.vue';
+import SearchBox from './components/SearchBox.vue';
 import SlidesView from './components/SlidesView.vue';
 import ErrorMessage from './components/ErrorMessage.vue';
 import PreviousSearches from './components/PreviousSearches.vue';
+
+import LookupApi from './lookupApi.js'
+
+import SlidesStats from './components/SlidesStats.vue'
+
+import { SLIDES_LOCATION } from './config'
+
+
 var errorMessage = "";
 var matchingSlides = [];
 
@@ -41,55 +61,45 @@ var prevSearches = [];
 var activeConnections = 0;
 var lastSearch;
 
-const website_title = process.env.VUE_APP_WEBSITE_TITLE || "Slide Lookup";
-document.title = website_title
 export default {
   name: 'App',
   components: {
     SearchBox,
     SlidesView,
     ErrorMessage,
-    PreviousSearches
+    PreviousSearches,
+    SlidesStats
   },
   methods: {
-    queryApi: function(keywords) {
+    queryApi: function(search) {
       // dont send api request for something already showing
-      if (keywords.join() === lastSearch) return
-      lastSearch = keywords.join();
+      if (search === lastSearch) return
 
       this.clearSlides();
-      if (keywords.length === 0) {
+      if (search === '') {
         this.errorMessage = "no search specified";
-      } else {
-        axios.post(API_QUERY, {keywords: keywords}).then((res) => {
-          if (res.data.slides.length == 0) {
-            this.errorMessage = "not found"
-          } else {
-            res.data.slides.forEach(slide => { // hard-disc-01
-              var ss = slide.split("-") // hard,disk,01
-              var title = ss.slice(0,ss.length-1).join("-") // hard-disk
-              var page = Number(ss[ss.length-1])  // 1
-              var path = `${STATIC_HOST}slides/${escape(slide)}.jpg`  // /slides/hard-disc-01.jpg
-              this.matchingSlides.push({
-                title: title,
-                page: page,
-                path: path
-              })
-            });
-          }
-        }).catch((err) => {
+        return
+      }
+      LookupApi.search(search, (err, { slides }) => {
+        if (err) {
           this.clearSlides();
-          if (err.response.data) {
-            this.errorMessage = err.response.data.message
-          } else {
-            this.errorMessage = "error"
+          this.errorMessage = err || "error"
+          return
+        }
+
+        this.matchingSlides = slides.map((slide) => {
+          return {
+            title: slide.title,
+            number: slide.number,
+            location: `${SLIDES_LOCATION}${slide.title}/${slide.number}.jpg`
           }
         })
-      }
+      })
     },
     clearSlides: function() {
       this.matchingSlides = [];
       this.errorMessage = "";
+      this.lastSearch = ''
     }
   },
   data() {
@@ -98,7 +108,7 @@ export default {
       errorMessage: errorMessage,
       prevSearches: prevSearches,
       activeConnections: activeConnections,
-      website_title: website_title
+      slidesStats: {}
     }
   },
   mounted() {
@@ -108,8 +118,8 @@ export default {
       // dont log duplicates send BACK_CHECK messages ago
       const splitPos = (BACK_CHECK < this.prevSearches.length) ? BACK_CHECK : this.prevSearches.length;
       const slice = this.prevSearches.slice(0, splitPos);
-      if (!slice.some((s) =>
-        (s.sender === search.sender && s.keywords === search.keywords)
+      if (!slice.includes((s) =>
+        (s.sender === search.sender && s.query === search.query)
       )) {
         this.prevSearches.unshift(search);
       }
@@ -121,6 +131,14 @@ export default {
     socketClient.setActiveListener((activeConnections) => {
       this.activeConnections = activeConnections;
     });
+
+
+    LookupApi.stats((err, stats) => {
+      if (err) {
+        return
+      }
+      this.slidesStats = stats
+    })
   }
 }
 </script>

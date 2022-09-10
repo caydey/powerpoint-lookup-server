@@ -4,14 +4,14 @@ FROM node:lts-alpine as builder
 WORKDIR /usr/src/app
 
 # for caching
-COPY package*.json /usr/src/app/
+COPY app/package*.json /usr/src/app/
 RUN npm install
 
 # install vue for building the acutal app
 RUN npm install @vue/cli
 
 # build
-COPY . /usr/src/app/
+COPY app/ /usr/src/app/
 RUN npm run build
 
 ## nginx
@@ -24,9 +24,6 @@ RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# slide jpgs
-COPY ./slides /slides
 
 EXPOSE 80
 

@@ -1,15 +1,56 @@
 version: "3.9"
 services:
-  ## api listening on port 3000
-  server: # back-end nodejs
-    build: ./server
-    restart: always
+  init:
+    build: ./init
+    volumes:
+      - ./powerpoints:/app/powerpoints
+      - slides:/slides
+    depends_on:
+      - database
+    networks:
+      - powerpoint-lookup
 
-  ## creates reverse proxy for port 3000 to port 80
-  nginx: # front-end reverse proxy nginx
+  client: # front-end nginx
     build: ./client
     restart: always
-    ports:  ## port 80 localhost goes to port 80 on docker
+    # nginx static files
+    volumes:
+      - slides:/slides
+    ports:
       - "80:80"
     depends_on:
       - server
+      - init
+    networks:
+      - powerpoint-lookup
+
+  server: # back-end nodejs
+    build: ./server
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - powerpoint-lookup
+
+  database: # middle elasticsearch
+    build: ./database
+    restart: always
+    ports:
+      - "9200:9200" # dev
+    environment:
+      - xpack.security.enabled=true # https nonsense
+      - discovery.type=single-node # disable default multi node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=pass
+    networks:
+      - powerpoint-lookup
+
+volumes:
+  slides:
+    external: false
+
+networks:
+  powerpoint-lookup:
+    driver: bridge

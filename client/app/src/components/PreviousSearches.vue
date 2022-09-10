@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="bottom container" >
+    <div class="bottom container">
       <label class="handle" for="chkBox">
-        <font-awesome-icon v-if="checked" icon="angle-down"/>
-        <font-awesome-icon v-else icon="angle-up"/>
+        <font-awesome-icon v-if="checked" icon="angle-down" />
+        <font-awesome-icon v-else icon="angle-up" />
       </label>
-      <input id="chkBox" type="checkbox" v-model="checked">
+      <input id="chkBox" type="checkbox" v-model="checked" />
       <div class="logsHandler">
         <div class="logsContainer">
           <div class="counter">
-            <span>online: {{activeConnections}}</span>
+            <span>online: {{ activeConnections }}</span>
           </div>
           <div class="logs">
-            <p v-for="(search) in searches" :key="search">
-              {{search.sender}}: {{search.keywords}}
+            <p v-for="search in searches" :key="search">
+              {{ search.sender }}: {{ search.query }}
             </p>
           </div>
         </div>
@@ -43,15 +43,15 @@
   padding-bottom: 0;
   background-color: black;
   border-radius: 20px 20px 0 0;
-  border: 2px solid rgb(28,89,165);
+  border: 2px solid rgb(28, 89, 165);
   border-bottom: none;
 }
 
 .logs {
   height: 200px;
   overflow-y: scroll;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 /* chrome hide scrollbar */
 .logs::-webkit-scrollbar {
@@ -74,7 +74,7 @@
 .handle {
   color: black;
   cursor: pointer;
-  background-color: rgb(28,89,165);
+  background-color: rgb(28, 89, 165);
   width: 60px;
   border-radius: 10px 10px 0 0;
   margin: auto;
@@ -92,7 +92,6 @@
   max-height: 300px; /* something bigger than 200+20px */
   transition: max-height 0.2s;
 }
-
 </style>
 
 <script>
@@ -113,7 +112,7 @@ export default {
     }
   },
   mounted() {
-    
+
   }
 }
 </script>

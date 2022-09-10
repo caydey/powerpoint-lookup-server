@@ -1,4 +1,4 @@
-import { SOCKET_SERVER } from './config.js';
+import { SOCKET_HOST } from './config.js';
 
 var searchesListener;
 var activeListener;
@@ -11,7 +11,7 @@ export default {
   }
 }
 
-const socket = new WebSocket(SOCKET_SERVER);
+const socket = new WebSocket(SOCKET_HOST);
 socket.addEventListener('message', (event) => {
   var json = JSON.parse(event.data);
   const type = json.type;

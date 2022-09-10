@@ -1,26 +1,30 @@
 <template>
   <div v-if="slide != -1">
     <h2 class="white">
-      {{matchingSlides[slide].title}}, page {{matchingSlides[slide].page}}
+      {{ matchingSlides[slide].title }}, page {{ matchingSlides[slide].number }}
     </h2>
     <div class="container text-center">
       <div id="slide" class="row justify-content-center">
         <button class="col-1" id="previous" @click="previous">
-          <font-awesome-icon icon="angle-left"/>
+          <font-awesome-icon icon="angle-left" />
         </button>
         <img
           class="col-10 img-fluid"
-          :src="matchingSlides[slide].path"
-          :alt="matchingSlides[slide].title+'-'+matchingSlides[slide].page"
+          :src="matchingSlides[slide].location"
+          :alt="matchingSlides[slide].location"
           @click="imgClick"
-        >
-       <button class="col-1" id="next" @click="next">
-          <font-awesome-icon icon="angle-right"/>
+        />
+        <button class="col-1" id="next" @click="next">
+          <font-awesome-icon icon="angle-right" />
         </button>
       </div>
     </div>
-    <p class="white">Page: {{slide+1}}/{{matchingSlides.length}}</p>
-    <focused-slide v-if="focusedSlide != -1" :slide="matchingSlides[focusedSlide]" @close="focusedSlide = -1"></focused-slide>
+    <p class="white">Page: {{ slide + 1 }}/{{ matchingSlides.length }}</p>
+    <focused-slide
+      v-if="focusedSlide != -1"
+      :slide="matchingSlides[focusedSlide]"
+      @close="focusedSlide = -1"
+    ></focused-slide>
   </div>
 </template>
 
@@ -31,7 +35,7 @@ svg {
 }
 h2 {
   margin: 0;
-  margin-top:0;
+  margin-top: 0;
   padding-bottom: 10px;
 }
 p {
@@ -42,7 +46,7 @@ p {
   font-family: monospace;
 }
 #slide {
-  margin:auto;
+  margin: auto;
 }
 .col-1 {
   width: 30px;
@@ -58,11 +62,12 @@ img {
   max-height: 60vh;
 }
 
-#next, #previous {
+#next,
+#previous {
   border: none;
-  background-color: rgb(78,89,155);
+  background-color: rgb(78, 89, 155);
 }
-#next { 
+#next {
   float: left;
 }
 #previous {
@@ -86,13 +91,13 @@ export default {
   methods: {
     previous: function() {
       if (this.slide == 0) {
-        this.slide = this.matchingSlides.length-1;
+        this.slide = this.matchingSlides.length - 1;
       } else {
         this.slide--;
       }
     },
     next: function() {
-      if (this.slide == this.matchingSlides.length-1) {
+      if (this.slide == this.matchingSlides.length - 1) {
         this.slide = 0;
       } else {
         this.slide++;

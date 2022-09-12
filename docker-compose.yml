@@ -35,8 +35,6 @@ services:
   database: # middle elasticsearch
     build: ./database
     restart: always
-    ports:
-      - "9200:9200" # dev
     environment:
       - xpack.security.enabled=true # https nonsense
       - discovery.type=single-node # disable default multi node

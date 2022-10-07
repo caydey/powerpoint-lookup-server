@@ -1,12 +1,6 @@
 <template>
   <div class="container text-center mt-3 p-2 bg-info" id="stats">
-    <h2>
-      Source code:
-      <a href="https://github.com/caydey/powerpoint-lookup-server"
-        >GitHub@caydey</a
-      >
-    </h2>
-    <strong>Created {{ new Date(stats.created).toLocaleString() }}</strong>
+    <strong>Category Contents</strong>
     <!-- <h3>Indexed slideshows</h3> -->
     <p v-for="slide in stats.slides" :key="slide.title">
       <span class="title">{{ slide.title }}</span>
@@ -19,7 +13,7 @@
 <style scoped>
 #stats {
   border-radius: 10px;
-  width: 500px;
+  width: 600px;
   color: black;
 }
 p,
@@ -28,7 +22,7 @@ h3 {
 }
 
 .title {
-  width: 350px;
+  width: 450px;
   display: inline-block;
   text-align: left;
 }
@@ -41,11 +35,8 @@ h3 {
 
 <script>
 export default {
-  name: 'ErrorMessage',
-  components: {
-  },
-  props: [
-    'stats'
-  ]
-}
+  name: "ErrorMessage",
+  components: {},
+  props: ["stats"],
+};
 </script>

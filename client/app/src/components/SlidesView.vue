@@ -1,7 +1,8 @@
 <template>
   <div v-if="slide != -1">
     <h2 class="white">
-      {{ matchingSlides[slide].title }}, page {{ matchingSlides[slide].number }}
+      <!-- {{ matchingSlides[slide].title }}, page {{ matchingSlides[slide].number }} -->
+      todo
     </h2>
     <div class="container text-center">
       <div id="slide" class="row justify-content-center">
@@ -22,7 +23,7 @@
     <p class="white">Page: {{ slide + 1 }}/{{ matchingSlides.length }}</p>
     <focused-slide
       v-if="focusedSlide != -1"
-      :slide="matchingSlides[focusedSlide]"
+      :slide="matchingSlides[focusedSlide].location"
       @close="focusedSlide = -1"
     ></focused-slide>
   </div>
@@ -76,52 +77,50 @@ img {
 </style>
 
 <script>
-import FocusedSlide from './FocusedSlide.vue';
+import FocusedSlide from "./FocusedSlide.vue";
 
 var slide = 0;
 var focusedSlide = -1;
 export default {
-  name: 'SlidesView',
+  name: "SlidesView",
   components: {
-    FocusedSlide
+    FocusedSlide,
   },
-  props: [
-    'matchingSlides'
-  ],
+  props: ["matchingSlides"],
   methods: {
-    previous: function() {
+    previous: function () {
       if (this.slide == 0) {
         this.slide = this.matchingSlides.length - 1;
       } else {
         this.slide--;
       }
     },
-    next: function() {
+    next: function () {
       if (this.slide == this.matchingSlides.length - 1) {
         this.slide = 0;
       } else {
         this.slide++;
       }
     },
-    imgClick: function() {
+    imgClick: function () {
       this.focusedSlide = this.slide;
-    }
+    },
   },
   data() {
     return {
       slide: slide,
-      focusedSlide: focusedSlide
-    }
+      focusedSlide: focusedSlide,
+    };
   },
   watch: {
-    matchingSlides: function(newVal) {
+    matchingSlides: function (newVal) {
       // oldVal; // suppress unused var warning
       if (newVal.length == 0) {
         this.slide = -1;
       }
       this.slide = 0;
       this.focusedSlide = -1;
-    }
-  }
-}
+    },
+  },
+};
 </script>

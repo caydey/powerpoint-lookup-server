@@ -18,7 +18,6 @@ app.use(express.json());
 
 
 // development
-var socketIOCors = {}
 if (process.env.NODE_ENV === 'development') {
   // serve static files
   app.use("/slides", express.static("../client/slides"));

@@ -1,4 +1,6 @@
 /powerpoints/
 
+/server/data/slides.json
+
 node_modules/
 dist/

@@ -1,6 +1,6 @@
 <template>
   <div @click="close">
-    <img :src="slide.path" :alt="slide.title+'-'+slide.page">
+    <img :src="slide" :alt="slide" />
     <div class="cover"></div>
   </div>
 </template>
@@ -10,12 +10,12 @@
 img {
   max-width: 100%;
   max-height: 100%;
-  
+
   padding: 20px;
   position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   z-index: 2;
 }
 .cover {
@@ -33,16 +33,13 @@ img {
 
 <script>
 export default {
-  name: 'FocusedSlide',
-  components: {
-  },
-  props: [
-    'slide'
-  ],
+  name: "FocusedSlide",
+  components: {},
+  props: ["slide"],
   methods: {
-    close: function() {
-      this.$emit('close');
-    }
-  }
-}
+    close: function () {
+      this.$emit("close");
+    },
+  },
+};
 </script>

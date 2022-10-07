@@ -28,22 +28,21 @@ input {
 
 <script>
 export default {
-  name: 'InputKeywords',
-  components: {
-  },
+  name: "InputKeywords",
+  components: {},
   methods: {
-    submit: function() {
-      this.$emit('submit', this.search)
+    submit: function () {
+      this.$emit("submit", this.search);
     },
-    clear: function() {
-      this.search = '';
-      this.$emit('clear');
-    }
+    clear: function () {
+      this.search = "";
+      this.$emit("clear");
+    },
   },
   data() {
     return {
-      search: ''
-    }
-  }
-}
+      search: "",
+    };
+  },
+};
 </script>

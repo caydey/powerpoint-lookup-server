@@ -39,7 +39,7 @@ const querySlides = (category, query) => {
   let matches = [];
   focusCategory.slides.forEach((cat) => {
     for (let i = 0; i < cat.pages.length; i++) {
-      const location = `${DATA_HOST}/${category}/${cat.title}/${i}.jpg`;
+      const location = `${DATA_HOST}/${category}/${cat.title}/${i+1}.jpg`;
       if (queryString(cat.pages[i], queryUpper)) {
         matches.push({
           title: cat.title,

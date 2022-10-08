@@ -10,6 +10,9 @@ var categoriesJson = []
 const categories = fs.readdirSync(slidesPath)// category
 categories.forEach(category => {
   const categoryPath = path.join(slidesPath, category)
+  if (!fs.lstatSync(categoryPath).isDirectory()) {
+    return
+  }
   const slideshows = fs.readdirSync(categoryPath) // slideshow
   const categoryJson = []
   slideshows.forEach(slideshow => {

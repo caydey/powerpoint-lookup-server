@@ -15,7 +15,7 @@ mkdir "$TMP_DIR"/jpg
 mkdir "$TMP_DIR"/pdf
 mkdir "$TMP_DIR"/pdf-slides
 
-rm -r "$IMAGES_OUTPUT_FOLDER"
+# rm -r "$IMAGES_OUTPUT_FOLDER/*"
 
 while IFS='' read -r -d '' category; do # foreach category
 	echo "$category"

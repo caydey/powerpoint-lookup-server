@@ -12,11 +12,14 @@ RUN npm install
 # copy actual app (js code)
 COPY . /usr/src/app
 
-# copy slides.json database from volume created by init
-CMD ["sh -c", "cp /slides/slides.json ./data/slides.json"]
+# copy slides.json database
+RUN ln -s /slides/slides.json /usr/src/app/data/slides.json
 
 EXPOSE 3000
 
-## lower user from root to node
+
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
+
+# lower user from root to node
 USER node
 CMD ["node", "server.js"]

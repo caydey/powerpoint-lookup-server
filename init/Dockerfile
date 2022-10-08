@@ -1,5 +1,5 @@
 # container to build application
-FROM ubuntu:18.04
+FROM archlinux:base
 
 WORKDIR /app
 
@@ -7,12 +7,8 @@ COPY ./parse_pptx.sh /app
 COPY /jsonify.js /app
 
 # dependencies
-# xpdf (pdftotext), libreoffice (soffice), imagemagick (convert), qpdf, jq, curl
-
-RUN apt-get -qq update && apt-get -qq -y install curl xpdf libreoffice qpdf imagemagick jq nodejs
-
-# imagemagick config, allow reading pdf files
-RUN rm /etc/ImageMagick-6/policy.xml
+# xpdf (pdftotext), libreoffice (soffice), imagemagick (convert), qpdf, ghostscript, jq, curl
+RUN pacman --noconfirm -Sy curl xpdf libreoffice qpdf imagemagick jq nodejs ghostscript
 
 CMD ["bash", "parse_pptx.sh"]
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
